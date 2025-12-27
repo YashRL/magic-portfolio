@@ -2,13 +2,13 @@ import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
-  firstName: "Selene",
-  lastName: "Yu",
+  firstName: "Yash",
+  lastName: "Rawal",
   name: `Yash Rawal`,
   role: "AIML Engineer",
   avatar: "/images/avatar.jpg",
   email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  location: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
 };
 
@@ -60,7 +60,7 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Engineering modular intelligence that reasons, adapts, and scales.</>,
   featured: {
     display: true,
     title: (
@@ -76,8 +76,8 @@ const home: Home = {
   },
   subline: (
     <>
-    I'm Selene, a AIML Engineer at <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
-</>
+    I’m <Text as="span" size="xl" weight="strong">Yash Rawal</Text>, an AIML Engineer shaping how AI systems<br /> reason, act, and scale. <br />When I’m not working, I’m building and researching what comes next.
+    </>
   ),
 };
 
@@ -161,63 +161,82 @@ const about: About = {
   },
   technical: {
     display: true, // set to false to hide this section
-    title: "Technical skills",
+    title: "Technical Skills",
     skills: [
       {
-        title: "Figma",
+        title: "Generative AI & LLM Engineering",
         description: (
-          <>Able to prototype in Figma with Once UI with unnatural speed.</>
+          <>Designing and deploying large-scale GenAI systems using state-of-the-art LLMs and prompt engineering.</>
         ),
         tags: [
-          {
-            name: "Figma",
-            icon: "figma",
-          },
+          { name: "OpenAI", icon: "openai" },
+          { name: "Claude", icon: "claude" },
+          { name: "Gemini", icon: "gemini" },
+          { name: "LLaMA", icon: "llama" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        title: "Next.js",
+        title: "RAG, Retrieval & Semantic Search",
         description: (
-          <>Building next gen apps with Next.js + Once UI + Supabase.</>
+          <>Building high-accuracy retrieval systems with vector databases and hybrid ranking algorithms.</>
         ),
         tags: [
-          {
-            name: "JavaScript",
-            icon: "javascript",
-          },
-          {
-            name: "Next.js",
-            icon: "nextjs",
-          },
-          {
-            name: "Supabase",
-            icon: "supabase",
-          },
+          { name: "LangChain", icon: "langchain" },
+          { name: "pgvector", icon: "pgvector" },
+          { name: "Pinecone", icon: "pinecone" },
+          { name: "Weaviate", icon: "weaviate" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
+        images: [],
+      },
+      {
+        title: "Machine Learning & Deep Learning",
+        description: (
+          <>Developing ML models, fine-tuning LLMs, and optimizing performance for production usage.</>
+        ),
+        tags: [
+          { name: "PyTorch", icon: "pytorch" },
+          { name: "TensorFlow", icon: "tensorflow" },
+          { name: "HuggingFace", icon: "huggingface" },
         ],
+        images: [],
+      },
+      {
+        title: "Cloud & Scalable Deployment",
+        description: (
+          <>Deploying AI systems on cloud platforms with serverless, containerization, and scalable backend APIs.</>
+        ),
+        tags: [
+          { name: "AWS", icon: "aws" },
+          { name: "Azure", icon: "azure" },
+          { name: "Google Cloud", icon: "gcp" },
+          { name: "Docker", icon: "docker" },
+        ],
+        images: [],
+      },
+      {
+        title: "Speech, NLP & Multimodal AI",
+        description: (
+          <>Implementing speech-to-text, entity recognition, and multimodal models for real-world AI applications.</>
+        ),
+        tags: [
+          { name: "Whisper", icon: "whisper" },
+          { name: "NLP", icon: "nlp" },
+          { name: "ASR", icon: "asr" },
+        ],
+        images: [],
+      },
+      {
+        title: "Data Engineering & MLOps",
+        description: (
+          <>Automating data workflows and deploying robust ML pipelines with monitoring and orchestration.</>
+        ),
+        tags: [
+          { name: "Airflow", icon: "airflow" },
+          { name: "Kafka", icon: "kafka" },
+          { name: "CI/CD", icon: "cicd" },
+        ],
+        images: [],
       },
     ],
   },
