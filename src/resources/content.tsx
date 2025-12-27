@@ -4,8 +4,8 @@ import { Line, Row, Text } from "@once-ui-system/core";
 const person: Person = {
   firstName: "Selene",
   lastName: "Yu",
-  name: `Selene Yu`,
-  role: "Design Engineer",
+  name: `Yash Rawal`,
+  role: "AIML Engineer",
   avatar: "/images/avatar.jpg",
   email: "example@gmail.com",
   location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
@@ -76,7 +76,7 @@ const home: Home = {
   },
   subline: (
     <>
-    I'm Selene, a design engineer at <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
+    I'm Selene, a AIML Engineer at <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
 </>
   ),
 };
@@ -102,9 +102,9 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        Yash Rawal is an AIML Engineer focused on building intelligent tools and agent-based systems. 
+        His work combines applied research, system design, and data-driven thinking to turn complex problems 
+        into scalable, profitable AI solutions.
       </>
     ),
   },
@@ -113,17 +113,24 @@ const about: About = {
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "Bigscal Technologies",
+        timeframe: "2024 - Present",
+        role: "AIML Engineer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Architected a modular MCP-based agent-to-agent system with plug-and-play discovery, enabling automatic capability detection and zero manual reconfiguration as new agents or tools are added.
           </>,
           <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Designed a high-accuracy content extraction and ingestion pipeline capable of processing anything from URLs and YouTube videos to 500+ page documents, ensuring consistent, structured knowledge intake at scale.
+          </>,
+          <>
+            Built an agent-first retrieval system optimized for modern reasoning-and-acting agents, delivering higher result accuracy with multi-filter search, low latency, and significantly reduced token and cost overhead.
+          </>,
+          <>
+            Implemented a dynamic PII redaction and safety layer that proactively prevents sensitive data leakage, even under user or agent errors, ensuring enterprise-grade data protection by default.
+          </>,
+          <>
+            Led and contributed to high-risk, enterprise AI initiatives for large corporate organizations, delivering production-ready systems with strong reliability, security, and compliance requirements.
           </>,
         ],
         images: [
@@ -136,22 +143,6 @@ const about: About = {
           },
         ],
       },
-      {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
-        achievements: [
-          <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
-          </>,
-          <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
-          </>,
-        ],
-        images: [],
-      },
     ],
   },
   studies: {
@@ -159,12 +150,12 @@ const about: About = {
     title: "Studies",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "Parul University, Vadodara",
+        description: <>MCA in AIML Technologies</>,
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Vikram University, Ujjain",
+        description: <>BSc in Mathematics and Computer Science</>,
       },
     ],
   },

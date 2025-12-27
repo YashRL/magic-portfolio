@@ -74,7 +74,7 @@ Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://
 
 ## Get involved
 
-- Join the Design Engineers Club on [Discord](https://discord.com/invite/5EyAQ4eNdS) and share your project with us!
+- Join the AIML Engineers Club on [Discord](https://discord.com/invite/5EyAQ4eNdS) and share your project with us!
 - Deployed your docs? Share it on the [Once UI Hub](https://once-ui.com/hub) too! We feature our favorite apps on our landing page.
 
 ## License
