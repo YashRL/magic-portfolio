@@ -126,7 +126,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </Heading>
         )}
 
-        {(avatars?.length > 0 || description?.trim() || content?.trim()) && (
+        {avatars && (avatars?.length > 0 || description?.trim() || content?.trim()) && (
           <Column gap="16">
             {avatars?.length > 0 && (
               <AvatarGroup avatars={avatars} size="m" reverse />
