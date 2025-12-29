@@ -15,13 +15,13 @@ import "slick-carousel/slick/slick-theme.css";
 import styles from "./ProjectCard.module.scss";
 
 interface ProjectCardProps {
-  href: string;
+  href?: string;
   images: string[];
-  title: string;
-  content: string;
-  description: string;
-  avatars: { src: string }[];
-  link: string;
+  title?: string;
+  content?: string;
+  description?: string;
+  avatars?: { src: string }[];
+  link?: string;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
