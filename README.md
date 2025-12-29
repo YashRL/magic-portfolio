@@ -10,7 +10,7 @@ View the demo [here](https://demo.magic-portfolio.com).
 
 **1. Clone the repository**
 ```
-git clone https://github.com/once-ui-system/magic-portfolio.git
+git clone https://github.com/YashRL/magic-portfolio.git
 ```
 
 **2. Install dependencies**

@@ -9,7 +9,7 @@ const person: Person = {
   avatar: "/images/avatar.jpg",
   email: "yashrawal987@gmail.com",
   location: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Hinid"], // optional: Leave the array empty if you don't want to display languages
+  languages: ["English", "Hindi"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter: Newsletter = {
@@ -25,7 +25,7 @@ const social: Social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system",
+    link: "https://github.com/YashRL",
     essential: true,
   },
   {
