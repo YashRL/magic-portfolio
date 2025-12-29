@@ -1,0 +1,358 @@
+---
+title: "PII Redaction Made Simple: Teaching AI What to Forget"
+summary: "Modern AI systems are becoming incredibly powerful. They read documents, summarize conversations, search the internet, reason over knowledge, and even act on our behalf. But with this power comes a very human problem: AI remembers too much"
+image: "/images/Blogs/PII_Redaction_Made_Simple_Teaching_AI_What_to_Forget/PII_art.png"
+publishedAt: "2025-12-29"
+tag: "Privacy and Compilance"
+---
+
+# PII Redaction Made Simple: Teaching AI What to Forget
+
+## Introduction
+
+Modern AI systems are becoming incredibly powerful. They read documents, summarize conversations, search the internet, reason over knowledge, and even act on our behalf. But with this power comes a very human problem:
+
+**AI remembers too much.**
+
+Emails, phone numbers, Aadhaar IDs, bank details, addresses — all of these are casually embedded inside documents, chat logs, PDFs, support tickets, and databases. Humans intuitively know what should remain private. Machines don’t.
+
+This is where **PII Redaction** comes in.
+
+In this article, I’ll explain PII redaction **without legal jargon**, **without security fear-mongering**, and **without overengineering**. We’ll understand *why* it exists, *how* it works at a conceptual level, and finally *how to build one yourself* using a very small Python example powered by **Microsoft Presidio**.
+
+The goal is not just to copy code — but to **build intuition**.
+
+---
+
+## What Is PII (Personally Identifiable Information)?
+
+PII stands for **Personally Identifiable Information**.
+
+In simple words:
+
+> PII is any piece of information that can identify a real human being.
+> 
+
+Some examples are obvious:
+
+- Full names
+- Phone numbers
+- Email addresses
+- Government IDs
+- Bank account numbers
+
+Some are less obvious:
+
+- IP addresses
+- Device IDs
+- Location data
+- Internal employee IDs
+- Combination of seemingly harmless data points
+
+Think of PII like **digital fingerprints**. Individually they may look harmless, but together they point to *you*.
+
+Now here’s the important part:
+
+> PII is not dangerous by default.
+It becomes dangerous when it flows into systems that were never meant to remember it forever.
+> 
+
+And modern AI systems are exactly that kind of system.
+
+---
+
+## Why PII Redaction Is Necessary in Modern Agentic AI Systems
+
+Agentic AI systems are different from traditional software.
+
+They don’t just:
+
+- Read once
+- Process once
+- Forget
+
+Instead, they:
+
+- Store memory
+- Retrieve context
+- Chain reasoning across steps
+- Call tools
+- Share intermediate outputs
+- Learn from previous interactions
+
+Now imagine this scenario:
+
+A support agent uploads a customer conversation:
+
+> “Hi, my name is Yash and my phone number is 9876543210.”
+> 
+
+An AI agent:
+
+- Extracts intent
+- Stores conversation memory
+- Indexes the text in a vector database
+- Sends context to another agent
+- Logs output for evaluation
+- Uses it later for training or analytics
+
+Suddenly, **one phone number is duplicated across multiple systems**.
+
+That’s not just a privacy issue — it’s an architectural problem.
+
+### Why redaction must happen *before* intelligence
+
+The key insight is this:
+
+> Once PII enters an agent’s memory, you’ve already lost control.
+> 
+
+So PII redaction must happen:
+
+- Before embedding
+- Before storage
+- Before logging
+- Before tool execution
+- Before agent-to-agent communication
+
+In agentic systems, **redaction is not a compliance layer — it’s a core infrastructure layer**.
+
+---
+
+## How PII Redaction Works (The Theory, Explained Simply)
+
+At a conceptual level, PII redaction is a **three-step pipeline**:
+
+![Architecture of a PII Readction System](/images/Blogs/PII_Redaction_Made_Simple_Teaching_AI_What_to_Forget/PII_Architecture.png)
+Architecture of a PII Readction System
+
+### 1. Understanding Language (NLP Layer)
+
+First, the system must understand text like a human:
+
+- What is a name?
+- What looks like a phone number?
+- What pattern resembles an ID?
+
+This is done using **Natural Language Processing (NLP)** models.
+
+Modern systems use transformer-based models (like spaCy transformers) that understand *context*, not just keywords.
+
+### 2. Recognizing Patterns (Detection Layer)
+
+Once language is understood, we apply **recognizers**.
+
+Recognizers are like detectives:
+
+- Some are **ML-based** (contextual understanding)
+- Some are **rule-based** (regex, patterns)
+
+For example:
+
+- A phone number in India has structure
+- A bank account has format
+- A passport follows a pattern
+
+Combining **context + patterns** dramatically reduces false positives.
+
+### 3. Anonymizing or Redacting (Action Layer)
+
+Once PII is detected, we don’t delete text.
+
+Instead, we:
+
+- Replace it with placeholders
+- Mask it
+- Hash it
+- Tokenize it
+
+Example:
+
+```
+"My phone number is 9876543210" 
+->  
+"My phone number is <PHONE_NUMBER>"
+```
+
+This preserves:
+
+- Sentence structure
+- Meaning
+- Context for AI reasoning
+
+But removes:
+
+- Identity
+- Risk
+- Leakage
+
+---
+
+## Building a Simple PII Redaction System in Python
+
+Now let’s build one.
+
+This example uses **Microsoft Presidio**, which is designed exactly for this problem.
+
+### Step 1: NLP Engine (Understanding Language)
+
+We use spaCy’s transformer model for high-quality language understanding.
+
+```python
+from presidio_analyzer.nlp_engineimport NlpEngineProvider
+
+config = {
+"nlp_engine_name":"spacy",
+"models": [{"lang_code":"en","model_name":"en_core_web_trf"}],
+}
+
+provider = NlpEngineProvider(nlp_configuration=config)
+nlp_engine = provider.create_engine()
+```
+
+Think of this as giving your system **eyes and ears**.
+
+---
+
+### Step 2: Recognizer Registry (What to Look For)
+
+Presidio comes with many predefined recognizers. But real systems need customization.
+
+```python
+from presidio_analyzerimport RecognizerRegistry
+
+registry = RecognizerRegistry()
+registry.load_predefined_recognizers()
+```
+
+Now we remove noisy recognizers that don’t apply to our context:
+
+```python
+REMOVE = [
+"NhsRecognizer",
+"UsBankRecognizer",
+"UsLicenseRecognizer",
+]
+
+for namein REMOVE:
+    registry.remove_recognizer(name)
+```
+
+This is important.
+
+**More recognizers ≠ better detection.
+Relevant recognizers = better precision.**
+
+---
+
+### Step 3: Custom Indian Phone Number Recognizer
+
+Instead of a generic phone detector, we define a **strict Indian format**.
+
+```python
+from presidio_analyzerimport Pattern, PatternRecognizer
+
+indian_phone_pattern = Pattern(
+    name="indian_phone",
+    regex=r"\b[6-9]\d{9}\b",
+    score=0.7,
+)
+
+indian_phone_recognizer = PatternRecognizer(
+    supported_entity="PHONE_NUMBER",
+    patterns=[indian_phone_pattern],
+)
+
+registry.remove_recognizer("PhoneRecognizer")
+registry.add_recognizer(indian_phone_recognizer)
+```
+
+This small change massively improves accuracy.
+
+---
+
+### Step 4: Analyzer Engine (Detect PII)
+
+```python
+from presidio_analyzerimport AnalyzerEngine
+
+analyzer = AnalyzerEngine(
+    nlp_engine=nlp_engine,
+    registry=registry,
+)
+```
+
+Now we test it:
+
+```python
+text ="yash and my phone number is 9876543210."
+
+results = analyzer.analyze(text=text, language="en")
+```
+
+Output:
+
+```
+type:PHONE_NUMBER,start:28,end:38,score:0.7
+```
+
+Your system now **knows where PII lives**.
+
+---
+
+### Step 5: Anonymization (Redaction)
+
+```python
+from presidio_anonymizerimport AnonymizerEngine
+
+anonymizer = AnonymizerEngine()
+anonymized = anonymizer.anonymize(
+    text=text,
+    analyzer_results=results
+)
+
+print(anonymized.text)
+```
+
+Final output:
+
+```
+yashand my phone numberis <PHONE_NUMBER>.
+```
+
+That’s it.
+
+No overengineering.
+
+No black magic.
+
+Just clean architecture.
+
+---
+
+## Final Thoughts: Why This Matters More Than Ever
+
+PII redaction is not about hiding information.
+
+It’s about **respecting boundaries between intelligence and identity**.
+
+As AI systems become:
+
+- More autonomous
+- More persistent
+- More interconnected
+
+The cost of ignoring privacy multiplies.
+
+If you’re building:
+
+- Agentic workflows
+- RAG systems
+- Memory-enabled assistants
+- Enterprise AI platforms
+
+Then **PII redaction should be one of the first systems you design — not the last one you patch in**.
+
+The best AI systems aren’t the ones that remember everything.
+
+They’re the ones that know **what to forget**.

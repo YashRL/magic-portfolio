@@ -77,12 +77,27 @@ function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
   );
 }
 
-function slugify(str: string): string {
-  const strWithAnd = str.replace(/&/g, " and "); // Replace & with 'and'
+function extractText(node: ReactNode): string {
+  if (typeof node === "string") return node;
+  if (typeof node === "number") return node.toString();
+  if (Array.isArray(node)) return node.map(extractText).join("");
+  if (node && typeof node === "object" && "props" in node) {
+    // @ts-ignore – MDX/React children
+    return extractText(node.props.children);
+  }
+  return "";
+}
+
+function slugify(input: ReactNode): string {
+  const text = extractText(input);
+
+  const strWithAnd = text.replace(/&/g, " and ");
+
   return transliterate(strWithAnd, {
     lowercase: true,
-    separator: "-", // Replace spaces with -
-  }).replace(/\-\-+/g, "-"); // Replace multiple - with single -
+    separator: "-",
+    trim: true,
+  }).replace(/-+/g, "-"); // collapse multiple dashes
 }
 
 function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
