@@ -37,7 +37,7 @@ const social: Social = [
   {
     name: "Instagram",
     icon: "instagram",
-    link: "https://www.instagram.com/once_ui/",
+    link: "https://www.instagram.com/_yash_rawal/",
     essential: false,
   },
   {
