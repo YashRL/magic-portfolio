@@ -7,9 +7,9 @@ const person: Person = {
   name: `Yash Rawal`,
   role: "AIML Engineer",
   avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
+  email: "yashrawal987@gmail.com",
   location: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  languages: ["English", "Hinid"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter: Newsletter = {
@@ -39,12 +39,6 @@ const social: Social = [
     icon: "instagram",
     link: "https://www.instagram.com/once_ui/",
     essential: false,
-  },
-  {
-    name: "Threads",
-    icon: "threads",
-    link: "https://www.threads.com/@once_ui",
-    essential: true,
   },
   {
     name: "Email",
