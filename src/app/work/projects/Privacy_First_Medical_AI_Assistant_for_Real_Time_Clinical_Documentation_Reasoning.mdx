@@ -1,0 +1,224 @@
+---
+title: "Privacy-First Medical AI Assistant for Real-Time Clinical Documentation & Reasoning"
+publishedAt: "2025-07-01"
+summary: "Built an on-device, enterprise-grade medical AI system that silently assists doctors and surgeons during clinical workflows—performing real-time speech recognition, medical entity extraction, and structured report generation under strict privacy constraints, before modern LLM and agent frameworks existed."
+images:
+  - "/images/Case_Studies/Privacy_First_Medical_AI_Assistant_for_Real_Time_Clinical_Documentation_Reasoning/diagram1.png"
+team:
+  - name: "Yash Rawal"
+    role: "Software Engineer"
+    avatar: "/images/yash.png"
+    linkedIn: "https://www.linkedin.com/in/rawal-yash/"
+---
+
+# Privacy-First Medical AI Assistant for Real-Time Clinical Documentation & Reasoning
+
+**Built an on-device, enterprise-grade medical AI system that silently assists doctors and surgeons during clinical workflows—performing real-time speech recognition, medical entity extraction, and structured report generation under strict privacy constraints, before modern LLM and agent frameworks existed.**
+
+> Role: AI/ML Engineer (Intern → Primary Implementer)
+> 
+> 
+> **Scope:** ASR research & training, LLM orchestration, medical NER, inference pipelines, GPU deployment
+> 
+
+---
+
+## Design Philosophy
+
+**Medical AI must adapt to clinicians—not interrupt them. Privacy is not a feature; it is a hard constraint.**
+
+---
+
+## The Context (Early AI Era Reality)
+
+This project was built in the **early days of LLMs (early 2023)**—before agent frameworks, before mature speech models, and before reliable medical-domain AI tooling.
+
+The goal was ambitious:
+
+> Build an AI assistant that doctors and surgeons could use hands-free during consultations, reporting, and procedures—running silently in the background, understanding medical speech, instruments, and terminology, and generating structured clinical documentation.
+> 
+
+### Hard Constraints (Non-Negotiable)
+
+- **No third-party LLM APIs** (OpenAI, Gemini, Anthropic forbidden)
+- Strict **medical privacy & compliance**
+- Real-time or near–real-time performance
+- Highly specialized **medical language & pronunciation**
+- Models were **immature and unreliable** at the time
+- Built as a **fresh intern**, learning by experimentation and failure
+
+Everything had to be **self-hosted**, **open-source**, and **custom-built**.
+
+---
+
+## System Overview
+
+The system operated as a **background intelligence layer**:
+
+- Continuously listens during consultations or procedures
+- Transcribes medical speech in real time
+- Extracts clinical entities (diagnosis, symptoms, procedures, drugs)
+- Structures content into medical documents and reports
+- Assists doctors *without disrupting their workflow*
+
+---
+
+## What We Built
+
+## 1. Medical-Grade ASR (The Hardest Problem)
+
+### Why ASR Failed Initially
+
+Medical speech is nothing like everyday language:
+
+- Complex terminology
+- Abbreviations
+- Accents
+- Rapid conversational delivery
+- Surgical instruments and procedure names
+
+**First POC failed completely.**
+
+### What I Tried (And Failed At)
+
+- Tested countless ASR systems:
+    - VOSK
+    - Whisper
+    - Faster-Whisper
+    - Whisper.cpp (C++ inference)
+- Attempted **training from scratch** using **wav2vec-style architectures**
+    - Learned CNNs, spectrograms, and audio-as-image representations deeply
+    - Hit **GPU and data limitations**
+
+This phase alone taught me more than any course or degree.
+
+### Breakthrough: Fine-Tuned Indic-Conformer (AI4Bharat)
+
+I pivoted from training-from-scratch to **fine-tuning strong open-source foundations**.
+
+- Used **AI4Bharat Indic-Conformer**
+- Experimented with:
+    - **CTC decoding** (faster, simpler)
+    - **RNN-T decoding** (better accuracy, streaming)
+- Discovered RNN-T worked better for conversational medical speech
+
+### Dataset Pain (Real Learning)
+
+- Manually cleaned **hours of doctor audio**
+- Created transcriptions in **LJSpeech-style datasets**
+- Countless iterations of:
+    - Audio normalization
+    - Noise removal
+    - Label correction
+
+This was the most time-consuming—and most educational—part of the project.
+
+### Outcome
+
+- Medical-domain ASR with acceptable real-time performance
+- Streaming-capable via **WebSockets**
+- Fully self-hosted inference pipeline
+
+---
+
+## 2. LLM Orchestration Without Frameworks
+
+### Constraints
+
+- No OpenAI / Gemini / Anthropic
+- Early open-source LLMs were inconsistent
+- No agent frameworks existed yet
+
+### Solution
+
+- Used **Meta LLaMA 3.1 (8B)** locally
+- Built **manual orchestration pipelines**:
+    - Carefully sequenced LLM calls
+    - Maintained strict context windows
+    - Enforced output boundaries using markers like:
+        
+        ```
+        START
+        ...
+        END
+        
+        ```
+        
+- Python post-processing logic extracted and validated outputs
+
+This was **early context engineering**, learned entirely through trial and error.
+
+> New AI engineers rarely experience this pain—but it fundamentally shaped how I reason about LLM reliability.
+> 
+
+---
+
+## 3. Medical Entity Extraction (Beyond LLMs)
+
+LLMs alone were not reliable for structured medical extraction at the time.
+
+### What We Added
+
+- Custom **NER models** for:
+    - Diagnoses
+    - Symptoms
+    - Procedures
+    - Drugs & dosages
+- Traditional ML models (Random Forest):
+    - Medicine and drug prediction assistance
+- Hybrid pipelines:
+    - NER + LLM reasoning
+    - Deterministic rules where failure was unacceptable
+
+This reduced hallucinations and improved consistency.
+
+---
+
+## 4. End-to-End Architecture
+
+- **ASR**
+    - Fine-tuned Indic-Conformer
+    - Streaming inference
+- **LLM**
+    - Self-hosted LLaMA
+    - Orchestrated reasoning pipelines
+- **NER & ML**
+    - Medical entity extraction
+    - Drug prediction assistance
+- **Infrastructure**
+    - GPU-backed cloud deployment (AWS)
+    - Secure APIs
+    - WebSocket-based streaming
+- **Privacy**
+    - No external model calls
+    - No data leakage
+    - Fully controlled inference environment
+
+---
+
+## Impact
+
+- Enabled **hands-free clinical documentation**
+- Met strict **medical privacy requirements**
+- Accurate transcription of **complex medical speech**
+- Automated structured medical report generation
+- Built entirely with **open-source models**
+- Became a **foundational learning experience** beyond any formal education
+
+---
+
+## Key Insight
+
+The biggest lesson wasn’t about models.
+
+It was this:
+
+> In constrained environments, reliability comes from orchestration, validation, and system design—not model size.
+> 
+
+This project taught me:
+
+- Context engineering before it had a name
+- LLM orchestration before agents existed
+- ASR fundamentals at a level few engineers reach
+- How real-world constraints shape real systems
