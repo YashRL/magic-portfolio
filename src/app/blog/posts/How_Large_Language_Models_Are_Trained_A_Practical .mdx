@@ -1,0 +1,376 @@
+---
+title: "How Large Language Models Are Trained: A Practical Mental Model of SFT, CoT, RLHF, and DPO"
+summary: "Modern Large Language Model (LLM) training is often described using complex terms like *RLHF*, *DPO*, or *alignment*. But in reality its more then that This article presents a **clear mental model** of how LLMs are trained, what each major technique does, and—most importantly—**which problem each technique is designed to solve**."
+image: "/images/Blogs/How_Large_Language_Models_Are_Trained_A_Practical /LLM_Tunning.png"
+publishedAt: "2025-01-22"
+tag: "LLMs"
+---
+
+# How Large Language Models Are Trained: A Practical Mental Model of SFT, CoT, RLHF, and DPO
+
+## Introduction: What Modern LLM Training Really Is
+
+Modern Large Language Model (LLM) training is often described using complex terms like *RLHF*, *DPO*, or *alignment*.
+
+Despite the terminology, the core reality is simpler:
+
+> LLM training is the process of encoding desired behavior into datasets and objectives, then optimizing those objectives using standard gradient descent.
+> 
+
+This article presents a **clear mental model** of how LLMs are trained, what each major technique does, and—most importantly—**which problem each technique is designed to solve**.
+
+---
+
+## I. Foundation: What Training Actually Is
+
+### The Core Training Loop (Unchanged Everywhere)
+
+Every training method discussed here ultimately uses the same loop:
+
+- A dataset
+- A loss function
+- Gradient descent
+- Weight updates
+
+**Key truth:**
+
+> Training itself is mechanical. No modern LLM technique violates this.
+> 
+
+---
+
+### Pretraining vs Fine-Tuning
+
+| Phase | What It Does |
+| --- | --- |
+| **Pretraining** | Learns language, facts, and latent reasoning |
+| **Fine-tuning** | Reshapes behavior, style, and preferences |
+
+**Key truth:**
+
+> Fine-tuning does not add intelligence; it reshapes how existing capabilities are expressed.
+> 
+
+---
+
+## II. Supervised Learning Family
+
+*(“Tell the model what to say”)*
+
+### Supervised Fine-Tuning (SFT)
+
+**Training signal**
+
+```
+prompt → desired response
+```
+
+**What it affects**
+
+- Task competence
+- Formatting
+- Basic usefulness
+
+**What it cannot do**
+
+- Express preferences
+- Compare outputs
+- Perform subtle alignment
+
+SFT is the **foundation** for all later techniques.
+
+---
+
+### Instruction Tuning
+
+**Training format**
+
+```
+Instruction
+Input
+Output
+
+```
+
+**What it affects**
+
+- Instruction following
+- Zero-shot generalization
+- Assistant-like behavior
+
+Instruction tuning teaches the model **what the user wants**, not what is objectively correct.
+
+---
+
+### Chain-of-Thought (CoT) Fine-Tuning
+
+**Training format**
+
+```
+Problem
+Reasoning steps
+Final Answer
+
+```
+
+**What it affects**
+
+- Explicit reasoning style
+- Step-by-step explanations
+- Reduced guessing
+
+**Critical insight:**
+
+> CoT exposes latent reasoning; it does not create new reasoning ability.
+> 
+
+---
+
+## III. Dataset Engineering (Where Most Gains Come From)
+
+### Output Formatting and Stop Signals
+
+Key practices:
+
+- Explicit sections like `Reasoning:` and `Final Answer:`
+- Clear semantic stopping points
+- Separation of reasoning and answer
+
+**Failure mode:**
+
+- Repetition or never stopping due to missing stop signals
+
+---
+
+### Loss Masking
+
+- Train only on desired tokens
+- Ignore prompts, padding, or boilerplate
+
+**Effect**
+
+- Cleaner outputs
+- Less degeneration
+- Better generalization
+
+---
+
+### Curriculum Learning
+
+- Easy → medium → hard
+- Arithmetic → algebra → word problems
+
+**Effect**
+
+- Training stability
+- Faster convergence
+
+---
+
+### Rejection Sampling / Best-of-N
+
+- Generate multiple answers
+- Keep the best
+- Train only on selected outputs
+
+This is a **cheap alternative to preference learning**.
+
+---
+
+## IV. Preference-Based Training Family
+
+*(“Which output is better?”)*
+
+### RLHF (Reinforcement Learning from Human Feedback)
+
+### Models involved
+
+1. **Language Model (LM)** – trainable
+2. **Reward Model (RM)** – frozen scorer
+3. **Reference Model** – frozen anchor
+
+### Training stages
+
+1. Supervised fine-tuning
+2. Reward model training (ranking)
+3. RL optimization (typically PPO)
+
+### Key properties
+
+- LM generates responses
+- RM scores them
+- LM updates to improve reward
+- KL penalty prevents cheating
+
+**Good at**
+
+- Tone
+- Politeness
+- Safety
+- Alignment
+
+**Bad at**
+
+- Math correctness
+- Deep reasoning
+
+---
+
+### Reward Model (RM)
+
+- Separate model
+- Scalar output (score)
+- Trained via supervised ranking
+- Frozen during RL
+
+**Key insight:**
+
+> The reward model is supervised learning, not magic.
+> 
+
+---
+
+### Reference Model
+
+- Frozen copy of the LM
+- Prevents reward hacking
+- Enforces behavioral stability
+
+---
+
+### Reward Hacking (Failure Mode)
+
+Common issues:
+
+- Over-verbosity
+- Confident nonsense
+- Exploiting reward shortcuts
+
+This is why reference models exist.
+
+---
+
+## V. DPO Family (Simplified Preference Learning)
+
+### Direct Preference Optimization (DPO)
+
+**Training data**
+
+```
+(prompt, preferred answer, rejected answer)
+```
+
+**What it does**
+
+- Removes the reward model
+- Removes PPO
+- Directly optimizes preferences
+
+**Key insight:**
+
+> DPO = RLHF without reinforcement learning.
+> 
+
+**Why it’s popular**
+
+- Simpler
+- More stable
+- Easier to debug
+
+---
+
+## VI. Safety and Alignment Variants
+
+### Constitutional AI
+
+- Rules instead of humans
+- Self-critique and revision
+- Training on revised outputs
+
+This is still a **dataset-driven technique**.
+
+---
+
+### Safety Fine-Tuning
+
+Targets:
+
+- Refusals
+- De-escalation
+- Policy compliance
+
+Narrow but essential.
+
+---
+
+## VII. Self-Improvement Techniques
+
+### Self-Training / Self-Distillation
+
+- Model generates data
+- Trains on its own outputs
+- Or teacher → student
+
+**Risk:** error amplification
+
+---
+
+## VIII. Optimization and Implementation Details
+
+### LoRA and Adapters
+
+- Parameter-efficient fine-tuning
+- Behavior shaping without full retraining
+
+---
+
+### Generation Control (Inference-Time)
+
+- `max_new_tokens`
+- Stop sequences
+- Regex extraction
+- Streaming tokens
+
+**Key truth:**
+
+> Stopping is enforced in production, not learned implicitly.
+> 
+
+---
+
+## IX. Common Failure Modes
+
+| Failure | Cause |
+| --- | --- |
+| Infinite repetition | No stop signal |
+| Over-generalized style | Dataset bias |
+
+These are expected outcomes of data-driven training.
+
+---
+
+## X. The Unifying Mental Model
+
+### What Actually Changes Outcomes
+
+1. Dataset structure
+2. Loss definition
+3. What is masked
+4. What is compared
+
+**Not**
+
+- Optimizer choice
+- Buzzwords
+- Algorithm names
+
+---
+
+## Final Summary
+
+> Modern LLM training is the art of encoding desired behavior into data and objectives, then letting standard optimization do the rest.
+> 
+
+Every major technique—SFT, CoT, RLHF, DPO, or Constitutional AI—exists to solve a **specific failure mode**, not to make the model inherently smarter.
+
+Understanding *which problem you are solving* is more important than choosing the most complex technique.
